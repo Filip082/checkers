@@ -9,4 +9,6 @@ module pl.edu.agh.wfiis.checkers {
 
     opens pl.edu.agh.wfiis.checkers to javafx.fxml;
     exports pl.edu.agh.wfiis.checkers;
+    exports pl.edu.agh.wfiis.checkers.game;
+    opens pl.edu.agh.wfiis.checkers.game to javafx.fxml;
 }
