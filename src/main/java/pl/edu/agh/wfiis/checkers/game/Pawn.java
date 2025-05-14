@@ -2,28 +2,33 @@ package pl.edu.agh.wfiis.checkers.game;
 
 public class Pawn {
     private final Color color;
-    private Position position;
+    private Board.Square square;
     private boolean isDame = false;
 
-    public Pawn(Color color, Position position) {
+    public Pawn(Color color) {
         this.color = color;
-        this.position = position;
     }
 
     public Color getColor() {
         return color;
     }
 
-    public Position getPosition() {
-        return position;
+    void setSquare(Board.Square square) {
+        this.square = square;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
+    Board.Square getSquare() {
+        return square;
     }
 
     public boolean isDame() {
         return isDame;
+    }
+
+    public void move(Board.Square targetSquare) {
+        square.setPawn(null);
+        setSquare(targetSquare);
+        targetSquare.setPawn(this);
     }
 
     @Override
