@@ -4,12 +4,13 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Board {
-    List<Pawn> whitePawns;
-    List<Pawn> blackPawns;
-    List<Square> squares = new ArrayList<>(32);
+    private static Board instance;
+    private List<Pawn> whitePawns;
+    private List<Pawn> blackPawns;
+    private final List<Square> squares = new ArrayList<>(32);
 
-    public class Square {
-        private Position position;
+    public final class Square {
+        private final Position position;
         private Pawn pawn;
 
         public Square(Pawn pawn, Position position) {
@@ -27,6 +28,10 @@ public class Board {
             this.pawn = pawn;
         }
 
+        public Position getPosition() {
+            return position;
+        }
+
         public boolean isEmpty() {
             return pawn == null;
         }
@@ -37,7 +42,11 @@ public class Board {
         }
     }
 
-    public Board() {
+    private Board() {
+        initialize();
+    }
+
+    private void initialize() {
         whitePawns = new ArrayList<>(12);
         blackPawns = new ArrayList<>(12);
         for (int i = 0; i < 32; i++) {
@@ -51,6 +60,17 @@ public class Board {
             }
             squares.add(new Square(pawn, new Position(i)));
         }
+    }
+
+    public static Board getInstance() {
+        if (instance == null) {
+            instance = new Board();
+        }
+        return instance;
+    }
+
+    public void reset() {
+        initialize();
     }
 
     public Square getSquare(Position position) {
@@ -79,7 +99,7 @@ public class Board {
             }
             sb.append("\n");
         }
-        sb.append("    A  B  C  D  E  F  G  H\n");
+        sb.append("    A  B  C  D  E  F  G  H ");
         return sb.toString();
     }
 }
