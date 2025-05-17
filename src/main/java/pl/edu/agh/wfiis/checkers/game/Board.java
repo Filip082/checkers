@@ -4,22 +4,36 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Board {
-    List<Pawn> whitePawns;
-    List<Pawn> blackPawns;
+    private static Board instance;
+    private List<Pawn> whitePawns;
+    private List<Pawn> blackPawns;
+    private final List<Square> squares = new ArrayList<>(32);
 
-    class Square {
-        Pawn pawn;
+    public final class Square {
+        private final Position position;
+        private Pawn pawn;
 
-        boolean isEmpty() {
-            return pawn == null;
-        }
-
-        Square() {
-            pawn = null;
-        }
-
-        Square(Pawn pawn) {
+        public Square(Pawn pawn, Position position) {
+            if (pawn != null)
+                pawn.setSquare(this);
             this.pawn = pawn;
+            this.position = position;
+        }
+
+        public Pawn getPawn() {
+            return pawn;
+        }
+
+        public void setPawn(Pawn pawn) {
+            this.pawn = pawn;
+        }
+
+        public Position getPosition() {
+            return position;
+        }
+
+        public boolean isEmpty() {
+            return pawn == null;
         }
 
         @Override
@@ -28,22 +42,45 @@ public class Board {
         }
     }
 
-    List<Square> squares = new ArrayList<>(32);
+    private Board() {
+        initialize();
+    }
 
-    public Board() {
+    private void initialize() {
         whitePawns = new ArrayList<>(12);
         blackPawns = new ArrayList<>(12);
         for (int i = 0; i < 32; i++) {
             Pawn pawn = null;
             if (i < 12) {
-                pawn = new Pawn(Color.WHITE, new Position(0, 0));
+                pawn = new Pawn(Color.WHITE);
                 whitePawns.add(pawn);
             } else if (i >= 20) {
-                pawn = new Pawn(Color.BLACK, new Position(0, 0));
+                pawn = new Pawn(Color.BLACK);
                 blackPawns.add(pawn);
             }
-            squares.add(new Square(pawn));
+            squares.add(new Square(pawn, new Position(i)));
         }
+    }
+
+    public static Board getInstance() {
+        if (instance == null) {
+            instance = new Board();
+        }
+        return instance;
+    }
+
+    public void reset() {
+        initialize();
+    }
+
+    public Square getSquare(Position position) {
+        return squares.get(position.get32());
+    }
+
+    public Pawn getPawn(Color c, int index) {
+        if (c == Color.WHITE)
+            return whitePawns.get(index % 12);
+        else return blackPawns.get(index % 12);
     }
 
     @Override
@@ -55,14 +92,14 @@ public class Board {
             sb.append(" ");
             for (int j = 0; j < 8; j++) {
                 if ((i + j) % 2 == 0) {
-                    sb.append(squares.get((8 * i + j) / 2));
+                    sb.append(squares.get(new Position(j + 1, i + 1).get32()));
                 } else {
                     sb.append("\u001B[47m   \u001B[0m");
                 }
             }
             sb.append("\n");
         }
-        sb.append("    A  B  C  D  E  F  G  H\n");
+        sb.append("    A  B  C  D  E  F  G  H ");
         return sb.toString();
     }
 }
