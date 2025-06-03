@@ -77,10 +77,24 @@ public class Board {
         return squares.get(position.get32());
     }
 
-    public Pawn getPawn(Color c, int index) {
-        if (c == Color.WHITE)
-            return whitePawns.get(index % 12);
-        else return blackPawns.get(index % 12);
+    public int[] getScore() {
+        return new int[]{12 - blackPawns.size(), 12 - whitePawns.size()};
+    }
+
+    public void makeMove(Move move) {
+        move.getMovingPawn().setSquare(this.getSquare(move.getDestination()));
+        this.getSquare(move.getDestination()).setPawn(move.getMovingPawn());
+        this.getSquare(move.getOrigin()).setPawn(null);
+
+        Pawn captured = move.getCaptured();
+        if (captured != null) {
+            captured.getSquare().setPawn(null);
+            captured.setSquare(null);
+            if (captured.getColor() == Color.WHITE)
+                whitePawns.remove(captured);
+            else
+                blackPawns.remove(captured);
+        }
     }
 
     @Override

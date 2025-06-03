@@ -9,7 +9,7 @@ public class Pawn {
         this.color = color;
     }
 
-    public Color getColor() {
+    Color getColor() {
         return color;
     }
 
@@ -21,14 +21,8 @@ public class Pawn {
         return square;
     }
 
-    public boolean isDame() {
+    boolean isDame() {
         return isDame;
-    }
-
-    public void move(Board.Square targetSquare) {
-        square.setPawn(null);
-        setSquare(targetSquare);
-        targetSquare.setPawn(this);
     }
 
     @Override
