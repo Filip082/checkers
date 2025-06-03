@@ -25,4 +25,10 @@ class PositionTest {
         Position position1 = new Position("A1");
         assertEquals(position, position1);
     }
+
+    @Test
+    void ToString() {
+        Position position = new Position("A1");
+        assertEquals("A1", position.toString());
+    }
 }
