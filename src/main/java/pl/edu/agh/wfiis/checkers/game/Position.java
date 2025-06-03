@@ -1,5 +1,7 @@
 package pl.edu.agh.wfiis.checkers.game;
 
+import java.util.Objects;
+
 public class Position {
     private int x;
     private int y;
@@ -16,12 +18,20 @@ public class Position {
         this.set32(index);
     }
 
+    public Position(String string) {
+        if (string.length() != 2) {
+            return;
+        }
+        this.setX(string.charAt(0) - 64);
+        this.setY(string.charAt(1) - 48);
+    }
+
     public int getX() {
         return x;
     }
 
     public int setX(int x) {
-        this.x = (x - 1) % 8 + 1;
+        this.x = ((x - 1) % 8 + 8) % 8 + 1;
         return this.x;
     }
 
@@ -30,7 +40,7 @@ public class Position {
     }
 
     public int setY(int y) {
-        this.y = (y - 1) % 8 + 1;
+        this.y = ((y - 1) % 8 + 8) % 8 + 1;
         return this.y;
     }
 
@@ -51,6 +61,18 @@ public class Position {
 
     @Override
     public String toString() {
-        return "Position [x=" + x + ", y=" + y + "]";
+        return "" + ('A' + getX() - 1) + getY();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Position position = (Position) o;
+        return x == position.x && y == position.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 }
