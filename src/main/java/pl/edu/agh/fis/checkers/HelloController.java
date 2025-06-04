@@ -1,4 +1,4 @@
-package pl.edu.agh.wfiis.checkers;
+package pl.edu.agh.fis.checkers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

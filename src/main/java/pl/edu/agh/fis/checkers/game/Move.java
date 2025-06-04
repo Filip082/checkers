@@ -1,4 +1,4 @@
-package pl.edu.agh.wfiis.checkers.game;
+package pl.edu.agh.fis.checkers.game;
 
 import java.lang.Math;
 import java.util.LinkedList;

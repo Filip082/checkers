@@ -1,4 +1,4 @@
-package pl.edu.agh.wfiis.checkers.game;
+package pl.edu.agh.fis.checkers.game;
 
 public class Pawn {
     private final Color color;

@@ -1,4 +1,4 @@
-package pl.edu.agh.wfiis.checkers.game;
+package pl.edu.agh.fis.checkers.game;
 
 import java.util.List;
 import java.util.ArrayList;
