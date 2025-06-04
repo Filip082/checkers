@@ -14,11 +14,21 @@ public class Pawn {
     }
 
     void setSquare(Board.Square square) {
+        if (this.square != null) {
+            this.square.setPawn(null);
+        }
         this.square = square;
+        if (this.square != null) {
+            this.square.setPawn(this);
+        }
     }
 
     Board.Square getSquare() {
         return square;
+    }
+
+    void promote() {
+        isDame = true;
     }
 
     boolean isDame() {
@@ -27,6 +37,6 @@ public class Pawn {
 
     @Override
     public String toString() {
-        return (color == Color.BLACK ? "\u001B[31m" : "") + " ● ";
+        return (color == Color.BLACK ? "\u001B[31m" : "") + (isDame() ? " ◉ " : " ● ");
     }
 }

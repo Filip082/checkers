@@ -83,13 +83,15 @@ public class Board {
 
     public void makeMove(Move move) {
         move.getMovingPawn().setSquare(this.getSquare(move.getDestination()));
-        this.getSquare(move.getDestination()).setPawn(move.getMovingPawn());
-        this.getSquare(move.getOrigin()).setPawn(null);
+
+        if (!move.getMovingPawn().isDame()
+                && move.getDestination().getY() == (move.getMovingPawn().getColor() == Color.WHITE ? 8 : 1)) {
+            move.getMovingPawn().promote();
+        }
 
         List<Pawn> captures = move.getCaptured();
         if (!captures.isEmpty()) {
             Pawn captured = captures.getFirst();
-            captured.getSquare().setPawn(null);
             captured.setSquare(null);
             if (captured.getColor() == Color.WHITE)
                 whitePawns.remove(captured);

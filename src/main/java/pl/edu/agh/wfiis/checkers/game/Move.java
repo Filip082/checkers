@@ -16,25 +16,28 @@ public class Move {
             throw new InvalidMoveException();
         }
         Board board = Board.getInstance();
-        movingPawn = (prev != null) ? prev.getMovingPawn() : board.getSquare(origin).getPawn();
+        movingPawn = prev != null ? prev.getMovingPawn() : board.getSquare(origin).getPawn();
         if (movingPawn == null || board.getSquare(destination).getPawn() != null) {
             throw new InvalidMoveException();
         }
-        int positiveDirection = (movingPawn.getColor() == Color.WHITE) ? 1 : -1;
+        int positiveDirection = movingPawn.getColor() == Color.WHITE ? 1 : -1;
         int moveX = destination.getX() - origin.getX();
         int moveY = destination.getY() - origin.getY();
         if (Math.abs(moveX) != Math.abs(moveY)) {
             throw new InvalidMoveException();
         }
-        if (movingPawn.isDame()) {
-
-        }
-        if (Math.abs(moveY) == 2) {
-            Position midPosition = new Position(origin.getX() + moveX / 2,
-                    origin.getY() + moveY / 2);
-            captured = board.getSquare(midPosition).getPawn();
-            if (captured == null || captured.getColor() == movingPawn.getColor()) {
-                throw new InvalidMoveException();
+        if (Math.abs(moveY) == 2 || movingPawn.isDame()) {
+            for (int i = 1; i < Math.abs(moveX); i++) {
+                captured = board.getSquare(new Position(
+                        origin.getX() + moveX / Math.abs(moveX) * i,
+                        origin.getY() + moveY / Math.abs(moveY) * i
+                )).getPawn();
+                if (!movingPawn.isDame() && (captured == null || captured.getColor() == movingPawn.getColor())
+                        || movingPawn.isDame()
+                        && ((i != Math.abs(moveX) - 1 && captured != null)
+                        || (i == Math.abs(moveX) - 1 && captured != null && captured.getColor() == movingPawn.getColor()))) {
+                    throw new InvalidMoveException();
+                }
             }
         } else if (moveY != positiveDirection || Math.abs(moveX) != 1) {
             throw new InvalidMoveException();
@@ -45,7 +48,7 @@ public class Move {
     }
 
     private Move(List<Position> moveSequence, Move prev) throws InvalidMoveException {
-        this(moveSequence.removeFirst(), (!moveSequence.isEmpty()) ? moveSequence.getFirst() : null, prev);
+        this(moveSequence.removeFirst(), !moveSequence.isEmpty() ? moveSequence.getFirst() : null, prev);
         if (moveSequence.size() > 1) {
             if (this.captured == null)
                 throw new InvalidMoveException();
