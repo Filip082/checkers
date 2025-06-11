@@ -6,6 +6,7 @@ module pl.edu.agh.fis.checkers {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires com.almasb.fxgl.all;
+    requires annotations;
 
     opens pl.edu.agh.fis.checkers to javafx.fxml;
     exports pl.edu.agh.fis.checkers;

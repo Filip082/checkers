@@ -9,14 +9,14 @@ public class Game {
     private Color currentPlayerColor = Color.WHITE;
 
     private static String Prompt(Color color) {
-        return "\033[K\033[0m"
-                + (color == Color.WHITE ? "\033[37m" : "\033[30m")
+        return "\033[0m"
+                + (color == Color.WHITE ? "\033[37m" : "\033[31m")
                 + "\uE0B6"
-                + (color == Color.WHITE ? "\033[47m\033[30m" : "\033[40m\033[37m")
+                + (color == Color.WHITE ? "\033[47m\033[30m" : "\033[41m\033[37m")
                 + "\033[1mPlayer "
                 + (color == Color.WHITE ? "1" : "2")
                 + "\033[0m"
-                + (color == Color.WHITE ? "\033[37m" : "\033[30m")
+                + (color == Color.WHITE ? "\033[37m" : "\033[31m")
                 + "\uE0B4\033[0m\033[32m ";
     }
 
@@ -34,9 +34,10 @@ public class Game {
             System.out.print("\033[u");
             System.out.println(Board.getInstance());
             System.out.println("\033[K" + message);
-            message = "";
-            System.out.print("\n\r\033[A");
+            message = " ● \033[33m" + score[0] + " : " + score[1] + "\033[31m ●\033[0m";
+            System.out.print("\nType \033[32mq\033[0m to quit\r\033[A");
 
+            System.out.print("\033[K");
             String input = console.readLine(Prompt(game.currentPlayerColor)).toUpperCase();
             if (input.contains("S")) {
                 message = "● \033[33m" + score[0] + " : " + score[1] + "\033[31m ●\033[0m";
@@ -53,7 +54,7 @@ public class Game {
                                 .toList()
                 ));
                 if (move.getMovingPawn().getColor() != game.currentPlayerColor) {
-                    throw new InvalidMoveException();
+                    throw new InvalidMoveException("Trying to move opponent's pawn");
                 }
                 if (!move.getCaptured().isEmpty()) {
                     StringBuilder captured = new StringBuilder();
@@ -65,11 +66,14 @@ public class Game {
                     for (Pawn pawn : captures) {
                         captured.append(pawn.getSquare().getPosition()).append(", ");
                     }
-                    captured.append(lastCaptured.getSquare().getPosition()).append("\n");
+                    captured.append(lastCaptured.getSquare().getPosition());
                     message = captured.toString();
                 }
             } catch (InvalidMoveException e) {
-                message = "Invalid move. Try again.";
+                message = "Invalid move. Try again. " + e.getMessage();
+                continue;
+            } catch (ForbiddenPositionException e) {
+                message = e.getMessage();
                 continue;
             }
             Board.getInstance().makeMove(move);
@@ -79,13 +83,13 @@ public class Game {
 
         System.out.print("\033[u");
         System.out.println(Board.getInstance());
-        System.out.println("\033[K" + "● \033[33m" + score[0] + " : " + score[1] + "\033[31m ●\033[0m\033[K");
+        System.out.println("\033[K" + " ● \033[33m" + score[0] + " : " + score[1] + "\033[31m ●\033[0m\033[K");
         if (score[0] == score[1]) {
             System.out.println("\033[32m\uE0B6\033[30m\033[42mTie\033[0m\033[32m\uE0B4\033[0m\033[K");
         } else {
             System.out.println(Prompt(score[1] < score[0] ? Color.WHITE : Color.BLACK)
                     + "\033[2D"
-                    + (score[1] < score[0] ? "\033[37m" : "\033[30m")
+                    + (score[1] < score[0] ? "\033[37m" : "\033[31m")
                     + "\033[43m\uE0B4\033[30m wins! \uF527\033[0m\033[33m\uE0B4\033[0m\033[K");
         }
     }

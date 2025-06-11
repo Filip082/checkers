@@ -105,40 +105,49 @@
                 <!-- Build an executable JAR -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>main</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                            <finalName>checkers-${version}</finalName>
-                            <archive>
-                                <manifest>
-                                    <addClasspath>true</addClasspath>
-                                    <mainClass>pl.edu.agh.fis.checkers.Checkers</mainClass>
-                                </manifest>
-                            </archive>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>tui</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                            <finalName>checkers-tui-${version}</finalName>
-                            <archive>
-                                <manifest>
-                                    <addClasspath>true</addClasspath>
-                                    <mainClass>pl.edu.agh.fis.checkers.Game</mainClass>
-                                </manifest>
-                            </archive>
-                        </configuration>
-                    </execution>
-                </executions>
+                <configuration>
+                    <finalName>checkers-${project.version}</finalName>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>pl.edu.agh.fis.checkers.Checkers</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <!--                <executions>-->
+                <!--                    <execution>-->
+                <!--                        <id>main</id>-->
+                <!--                        <phase>package</phase>-->
+                <!--                        <goals>-->
+                <!--                            <goal>jar</goal>-->
+                <!--                        </goals>-->
+                <!--                        <configuration>-->
+                <!--                            <finalName>checkers-${project.version}</finalName>-->
+                <!--                            <archive>-->
+                <!--                                <manifest>-->
+                <!--                                    <addClasspath>true</addClasspath>-->
+                <!--                                    <mainClass>pl.edu.agh.fis.checkers.Checkers</mainClass>-->
+                <!--                                </manifest>-->
+                <!--                            </archive>-->
+                <!--                        </configuration>-->
+                <!--                    </execution>-->
+                <!--                    <execution>-->
+                <!--                        <id>tui</id>-->
+                <!--                        <phase>package</phase>-->
+                <!--                        <goals>-->
+                <!--                            <goal>jar</goal>-->
+                <!--                        </goals>-->
+                <!--                        <configuration>-->
+                <!--                            <finalName>checkers-tui-${project.version}</finalName>-->
+                <!--                            <archive>-->
+                <!--                                <manifest>-->
+                <!--                                    <addClasspath>true</addClasspath>-->
+                <!--                                    <mainClass>pl.edu.agh.fis.checkers.Game</mainClass>-->
+                <!--                                </manifest>-->
+                <!--                            </archive>-->
+                <!--                        </configuration>-->
+                <!--                    </execution>-->
+                <!--                </executions>-->
             </plugin>
         </plugins>
     </build>
