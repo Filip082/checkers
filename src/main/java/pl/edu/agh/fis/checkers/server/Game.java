@@ -48,12 +48,12 @@ public class Game extends Thread implements Runnable {
                 BufferedWriter out = whiteTurn ? whiteOut : blackOut;
 
 //                in.skip(1);
-                in.mark(0);
-                while (in.ready()) {
-                    in.mark(0);
-                    in.skip(1);
-                }
-                in.reset();
+//                in.mark(0);
+//                while (in.ready()) {
+//                    in.mark(0);
+//                    in.skip(1);
+//                }
+//                in.reset();
                 out.write("MOVE_OR_COMMAND");
                 out.newLine();
                 out.flush();
