@@ -1,0 +1,8 @@
+handlers/teavm/
+.env
+.vscode/
+.DS_Store
+.idea/
+node_modules/
+dist/
+
