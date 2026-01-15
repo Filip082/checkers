@@ -12,7 +12,14 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.10.2</junit.version>
+        <teavm.version>0.13.0</teavm.version>
     </properties>
+
+    <packaging>pom</packaging>
+    <modules>
+        <module>checkers-core</module>
+        <module>checkers-web</module>
+    </modules>
 
     <dependencies>
         <dependency>
@@ -21,45 +28,21 @@
             <version>3.42.0.0</version>
         </dependency>
         <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>17.0.6</version>
+            <groupId>org.teavm</groupId>
+            <artifactId>teavm-classlib</artifactId>
+            <version>${teavm.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>17.0.6</version>
+            <groupId>org.teavm</groupId>
+            <artifactId>teavm-jso</artifactId>
+            <version>${teavm.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-media</artifactId>
-            <version>17.0.6</version>
-        </dependency>
-        <dependency>
-            <groupId>org.controlsfx</groupId>
-            <artifactId>controlsfx</artifactId>
-            <version>11.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.kordamp.ikonli</groupId>
-            <artifactId>ikonli-javafx</artifactId>
-            <version>12.3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.kordamp.bootstrapfx</groupId>
-            <artifactId>bootstrapfx-core</artifactId>
-            <version>0.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.almasb</groupId>
-            <artifactId>fxgl</artifactId>
-            <version>17.3</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.openjfx</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>org.teavm</groupId>
+            <artifactId>teavm-jso-apis</artifactId>
+            <version>${teavm.version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -86,74 +69,54 @@
                     <target>24</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.8</version>
-                <executions>
-                    <execution>
-                        <!-- Default configuration for running with: mvn clean javafx:run -->
-                        <id>default-cli</id>
-                        <configuration>
-                            <mainClass>pl.edu.agh.fis.checkers/pl.edu.agh.fis.checkers.Checkers</mainClass>
-                            <launcher>app</launcher>
-                            <jlinkZipName>app</jlinkZipName>
-                            <jlinkImageName>app</jlinkImageName>
-                            <noManPages>true</noManPages>
-                            <stripDebug>true</stripDebug>
-                            <noHeaderFiles>true</noHeaderFiles>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <!-- Build an executable JAR -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <finalName>checkers-${project.version}</finalName>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>pl.edu.agh.fis.checkers.Checkers</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-                <!--                <executions>-->
-                <!--                    <execution>-->
-                <!--                        <id>main</id>-->
-                <!--                        <phase>package</phase>-->
-                <!--                        <goals>-->
-                <!--                            <goal>jar</goal>-->
-                <!--                        </goals>-->
-                <!--                        <configuration>-->
-                <!--                            <finalName>checkers-${project.version}</finalName>-->
-                <!--                            <archive>-->
-                <!--                                <manifest>-->
-                <!--                                    <addClasspath>true</addClasspath>-->
-                <!--                                    <mainClass>pl.edu.agh.fis.checkers.Checkers</mainClass>-->
-                <!--                                </manifest>-->
-                <!--                            </archive>-->
-                <!--                        </configuration>-->
-                <!--                    </execution>-->
-                <!--                    <execution>-->
-                <!--                        <id>tui</id>-->
-                <!--                        <phase>package</phase>-->
-                <!--                        <goals>-->
-                <!--                            <goal>jar</goal>-->
-                <!--                        </goals>-->
-                <!--                        <configuration>-->
-                <!--                            <finalName>checkers-tui-${project.version}</finalName>-->
-                <!--                            <archive>-->
-                <!--                                <manifest>-->
-                <!--                                    <addClasspath>true</addClasspath>-->
-                <!--                                    <mainClass>pl.edu.agh.fis.checkers.Game</mainClass>-->
-                <!--                                </manifest>-->
-                <!--                            </archive>-->
-                <!--                        </configuration>-->
-                <!--                    </execution>-->
-                <!--                </executions>-->
-            </plugin>
+            <!--            <plugin>-->
+            <!--                &lt;!&ndash; Build an executable JAR &ndash;&gt;-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-jar-plugin</artifactId>-->
+            <!--                <configuration>-->
+            <!--                    <finalName>checkers-${project.version}</finalName>-->
+            <!--                    <archive>-->
+            <!--                        <manifest>-->
+            <!--                            <addClasspath>true</addClasspath>-->
+            <!--                            <mainClass>pl.edu.agh.fis.checkers.Checkers</mainClass>-->
+            <!--                        </manifest>-->
+            <!--                    </archive>-->
+            <!--                </configuration>-->
+            <!--                &lt;!&ndash;                <executions>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                    <execution>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                        <id>main</id>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                        <phase>package</phase>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                        <goals>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                            <goal>jar</goal>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                        </goals>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                        <configuration>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                            <finalName>checkers-${project.version}</finalName>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                            <archive>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                                <manifest>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                                    <addClasspath>true</addClasspath>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                                    <mainClass>pl.edu.agh.fis.checkers.Checkers</mainClass>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                                </manifest>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                            </archive>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                        </configuration>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                    </execution>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                    <execution>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                        <id>tui</id>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                        <phase>package</phase>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                        <goals>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                            <goal>jar</goal>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                        </goals>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                        <configuration>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                            <finalName>checkers-tui-${project.version}</finalName>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                            <archive>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                                <manifest>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                                    <addClasspath>true</addClasspath>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                                    <mainClass>pl.edu.agh.fis.checkers.Game</mainClass>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                                </manifest>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                            </archive>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                        </configuration>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                    </execution>&ndash;&gt;-->
+            <!--                &lt;!&ndash;                </executions>&ndash;&gt;-->
+            <!--            </plugin>-->
         </plugins>
     </build>
 </project>
