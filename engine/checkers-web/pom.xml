@@ -143,7 +143,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.basedir}/../../bazy_proj/client/assets/teavm
+                            <outputDirectory>${project.basedir}/../../client/assets/teavm
                             </outputDirectory>
                             <resources>
                                 <resource>
@@ -160,7 +160,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.basedir}/../../bazy_proj/server/handlers/teavm
+                            <outputDirectory>${project.basedir}/../../server/handlers/teavm
                             </outputDirectory>
                             <resources>
                                 <resource>
