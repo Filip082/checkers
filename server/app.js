@@ -16,8 +16,8 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-app.use('/auth', authRoutes);
-app.use('/game', gameRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/game', gameRoutes);
 
 app.use(express.static('public'));
 

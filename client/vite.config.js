@@ -10,10 +10,10 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3000', // Adres Twojego backendu
         changeOrigin: true,
-        secure: false,
+        secure: false
         // Opcjonalnie: jeśli na backendzie nie masz prefixu '/api' w endpointach,
         // użyj rewrite, aby go wyciąć przed wysłaniem do serwera:
-        rewrite: (path) => path.replace(/^\/api/, '')
+        // rewrite: (path) => path.replace(/^\/api/, '')
       },
       
       // 2. Proxy dla Socket.io (ważne!)
