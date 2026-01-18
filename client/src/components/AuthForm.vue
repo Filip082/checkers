@@ -15,7 +15,7 @@ const toggleMode = () => {
 
 const handleSubmit = async () => {
   message.value = '';
-  const endpoint = isLoginMode.value ? 'http://localhost:3000/auth/login' : 'http://localhost:3000/auth/register';
+  const endpoint = isLoginMode.value ? '/api/auth/login' : '/api/auth/register';
   
   try {
     const response = await fetch(endpoint, {
