@@ -3,6 +3,8 @@ const http = require('http');
 const { Server } = require("socket.io");
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const cookie = require('cookie');
+const jwt = require('jsonwebtoken');
 
 const authRoutes = require('./routes/auth');
 const gameRoutes = require('./routes/game');
@@ -27,6 +29,22 @@ const io = new Server(server, {
         origin: "http://localhost:5173",
         methods: ["GET", "POST"],
         credentials: true
+    }
+});
+
+io.use((socket, next) => {
+    try {
+        const cookies = cookie.parseCookie(socket.request.headers.cookie || "");
+        const token = cookies.token;
+
+        if (!token)
+            return next(new Error('Brak tokena'));
+        const result = jwt.verify(token, process.env.JWT_SECRET);
+
+        socket.user = result;
+        next();
+    } catch (err) {
+        next(new Error('Niezalogowany'));
     }
 });
 

@@ -1,6 +1,5 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const cookie = require('cookie');
 const db = require("../config/db");
 
 if (!global.self) global.self = global;
@@ -13,22 +12,6 @@ const restoreGame = warcaby.restoreGame;
 const activeGames = new Map();
 
 module.exports = (io, socket) => {
-    io.use((socket, next) => {
-        try {
-            const cookies = cookie.parseCookie(socket.request.headers.cookie || "");
-            const token = cookies.token;
-
-            if (!token)
-                return next(new Error('Niezalogowany'));
-            const result = jwt.verify(token, process.env.JWT_SECRET);
-
-            socket.user = result;
-            next();
-        } catch (err) {
-            next(new Error('Niezalogowany'));
-        }
-    });
-
     socket.on('connect_to_game', async ({id_gra}) => {
         try {
             if (socket.id_gracz_gra || socket.id_gra)
@@ -67,7 +50,6 @@ module.exports = (io, socket) => {
         } catch (err) {
             console.error(err);
             socket.emit('error', 'Błąd podczas dołączania do gry');
-            socket.disconnect();
         }
     });
 

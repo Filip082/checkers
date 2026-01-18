@@ -58,7 +58,7 @@ router.post('/login', async (req, res) => {
 
 router.get('/me', auth, (req, res) => {
     // req.user comes from auth middleware
-    res.json({ username: req.user.login, id: req.user.id });
+    res.status(200).json({ username: req.user.login, id: req.user.id });
 });
 
 router.post('/logout', (req, res) => {
