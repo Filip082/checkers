@@ -15,6 +15,7 @@ const currentView = ref('lobby'); // 'lobby', 'game', 'my-games', 'ranking'
 const recievedMove =  ref(null);
 const moveHistory = shallowRef([]);
 const color = ref(null);
+const errorMessage = ref(null);
 
 // Game Board State (Map: "A1" -> "white" | "red")
 const board = ref({});
@@ -43,6 +44,11 @@ const connectSocket = () => {
 
     socket.value.on('error', (error) => {
         console.error(error);
+        errorMessage.value = error || "Wystąpił nieznany błąd";
+    });
+
+    socket.value.on('connect_error', (err) => {
+        console.error("Błąd połączenia:", err.message); // np. "Niezalogowany"
     });
 
     socket.value.on('move_made', (move) => {
@@ -81,16 +87,17 @@ const createGame = async () => {
       credentials: 'include'
     });
     const data = await response.json();
-    if (response.status === 201) {
+    if (response.ok) {
        // Automatically join the game view
        // We might need to store current game ID in a ref
        console.log("Created game:", data.id_gra);// Initialize visuals
        connectToGame(data.id_gra);
     } else {
-       alert("Błąd tworzenia gry " + response.status);
+       errorMessage.value = "Błąd tworzenia gry: " + response.status;
     }
   } catch(e) {
     console.error(e);
+    errorMessage.value = "Błąd połączenia: " + e.message;
   }
 };
 
@@ -106,6 +113,11 @@ const disconnectFromGame = () => {
     socket.value.emit('disconnect_from_game');
     console.log('Disconnected from game');
   }
+};
+
+const exitGame = () => {
+  currentView.value = 'lobby';
+  errorMessage.value = null;
 };
 
 onMounted(() => {
@@ -215,6 +227,17 @@ const logoutAndClose = () => {
 
           <!-- Game View -->
           <div v-else-if="currentView === 'game'" class="game-container">
+            
+            <div v-if="errorMessage" class="game-error-overlay">
+                <div class="game-error-box">
+                    <p>{{ errorMessage }}</p>
+                    <div class="game-error-buttons">
+                        <button @click="errorMessage = null">Zamknij</button>
+                        <button @click="exitGame" class="danger-btn">Wyjdź z gry</button>
+                    </div>
+                </div>
+            </div>
+
             <div class="board-wrapper">
               <GameBoard :pieces="board" :my-color="color"/>
             </div>
@@ -428,6 +451,81 @@ const logoutAndClose = () => {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  position: relative; /* Anchor for absolute overlay */
+}
+
+.game-error-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Position slightly higher */
+  padding-top: 20%;
+  z-index: 999;
+  border-radius: 8px;
+  backdrop-filter: blur(2px);
+}
+
+.game-error-box {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  max-width: 90%;
+  width: 400px;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.game-error-box p {
+  color: #d32f2f;
+  font-weight: 600;
+  margin-bottom: 24px;
+  font-size: 1.1rem;
+}
+
+.game-error-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.game-error-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background-color 0.2s;
+}
+
+.game-error-buttons button:first-child {
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.game-error-buttons button:first-child:hover {
+  background-color: #e0e0e0;
+}
+
+.game-error-buttons .danger-btn {
+  background-color: #d32f2f;
+  color: white;
+}
+
+.game-error-buttons .danger-btn:hover {
+  background-color: #b71c1c;
 }
 
 .controls-wrapper {
