@@ -45,7 +45,7 @@ create table warcaby.gracz_gra
     id_gracz_gra serial not null primary key,
     id_gracz     int    not null references warcaby.gracz (id_gracz),
     id_gra       int    not null references warcaby.gra (id_gra),
-    primary key (id_gracz, id_gra),
+    unique (id_gracz, id_gra),
     wynik        int default 0,
     kolor        int    not null references warcaby.kolor (id_kolor)
 );
@@ -55,9 +55,6 @@ create table warcaby.ruch
     id_ruch      serial not null primary key,
     id_gracz_gra int    not null references warcaby.gracz_gra (id_gracz_gra),
     ruch         varchar check ( ruch ~ '^[A-H][1-8]( [A-H][1-8])+$' ),
-    start        char(2) check ( start ~ '^[A-H][1-8]$' ),
-    koniec       char(2) check ( koniec ~ '^[A-H][1-8]$' and koniec != start ),
-    bicia        integer,
     czas_ruchu   timestamp default current_timestamp
 );
 
@@ -240,13 +237,6 @@ BEGIN
 
     NEW.ruch := regexp_replace(NEW.ruch, '\s+', ' ', 'g');
     NEW.ruch := upper(btrim(NEW.ruch));
-    NEW.start := left(NEW.ruch, 2);
-    NEW.koniec := right(NEW.ruch, 2);
-    IF (abs(ascii(NEW.start) - ascii(split_part(NEW.ruch, ' ', 2))) = 2) THEN
-        NEW.bicia := regexp_count(NEW.ruch, '[A-H][1-8]') - 1;
-    ELSE
-        NEW.bicia := 0;
-    END IF;
 
     RETURN NEW;
 END;
@@ -261,9 +251,17 @@ EXECUTE FUNCTION warcaby.sprawdz_ruch_gracza();
 CREATE OR REPLACE FUNCTION warcaby.wykonaj_ruch()
     RETURNS TRIGGER AS
 $$
+DECLARE
+    _bicia integer;
 BEGIN
+    IF (abs(ascii(left(NEW.ruch, 2)) - ascii(split_part(NEW.ruch, ' ', 2))) = 2) THEN
+        _bicia := regexp_count(NEW.ruch, '[A-H][1-8]') - 1;
+    ELSE
+        _bicia := 0;
+    END IF;
+
     UPDATE warcaby.gracz_gra
-    SET wynik = COALESCE(wynik, 0) + NEW.bicia
+    SET wynik = COALESCE(wynik, 0) + _bicia
     WHERE id_gracz_gra = NEW.id_gracz_gra;
 
     RETURN NEW;
