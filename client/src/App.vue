@@ -54,6 +54,10 @@ const connectSocket = () => {
     socket.value.on('move_made', (move) => {
       recievedMove.value = move.ruch;
     });
+
+    socket.value.on('game_over', (data) => {
+      errorMessage.value = `Koniec gry! Zwycięzca: ${data.zwyciezca_login}`;
+    });
 };
 
 const handleLoginSuccess = (userData) => {
