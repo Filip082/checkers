@@ -14,11 +14,14 @@ const moveInput = ref('');
 watch(() => props.move, () => {
   verifyMove(warcaby.value, props.move);
   applyMove(warcaby.value);
+  myTurn.value = !myTurn.value;
   emit('board-state', getBoardState(warcaby.value));
 });
 
 onMounted(() => {
   console.log(props.moveHistory);
+  const currentPlayer = props.moveHistory ? props.moveHistory.length % 2 === 0 ? 'Biały' : 'Czarny' : 'Biały';
+  myTurn.value = (props.myColor === currentPlayer);
   warcaby.value = restoreGame(props.moveHistory || []);
   emit('board-state', getBoardState(warcaby.value));
 });
@@ -59,11 +62,12 @@ const sendMove = () => {
       <input 
         v-model="moveInput" 
         type="text" 
-        :placeholder="moveOk ? 'Ruch (np. A3 B4)' : 'Niepoprawny ruch!'" 
+        :disabled="!myTurn"
+        :placeholder="myTurn ? 'Ruch (np. A3 B4)' : 'Zaczekaj na ruch przeciwnika'" 
         @keyup.enter="sendMove"
         :class="{ error: !moveOk }"
       />
-      <button @click="sendMove" :disabled="!moveOk">Wyślij</button>
+      <button @click="sendMove" :disabled="!moveOk || !myTurn">Wyślij</button>
     </div>
   </div>
 </template>

@@ -252,6 +252,7 @@ const logoutAndClose = () => {
                 @board-state="updateBoardState" 
                 :move="recievedMove"
                 :moveHistory="moveHistory"
+                :my-color="color"
               />
             </div>
           </div>
