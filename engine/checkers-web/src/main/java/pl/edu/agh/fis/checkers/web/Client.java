@@ -39,17 +39,18 @@ public class Client {
             client.board.makeMove(move);
         }
 
-        Move move = new Move(client.board, new LinkedList<>(
-                Arrays.stream(String.valueOf(moves.get(moves.getLength() - 1)).split(" "))
-                        .map(Position::new)
-                        .toList()
-        ));
+        if (moves.getLength() >= 1) {
+            Move move = new Move(client.board, new LinkedList<>(
+                    Arrays.stream(String.valueOf(moves.get(moves.getLength() - 1)).split(" "))
+                            .map(Position::new)
+                            .toList()
+            ));
 
-        for (Pawn pawn : move.getCaptured())
-            client.capturedPawns.add(constructPawn(pawn));
+            for (Pawn pawn : move.getCaptured())
+                client.capturedPawns.add(constructPawn(pawn));
 
-        client.board.makeMove(move);
-
+            client.board.makeMove(move);
+        }
         return client;
     }
 
