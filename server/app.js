@@ -11,10 +11,6 @@ const gameRoutes = require('./routes/game');
 const gameHandler = require('./handlers/gameHandler');
 
 const app = express();
-app.use(cors({
-    origin: 'http://localhost:5173', // Vue frontend
-    credentials: true
-}));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -24,13 +20,7 @@ app.use('/api/game', gameRoutes);
 app.use(express.static('public'));
 
 const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-        origin: "http://localhost:5173",
-        methods: ["GET", "POST"],
-        credentials: true
-    }
-});
+const io = new Server(server);
 
 io.use((socket, next) => {
     try {
