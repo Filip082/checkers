@@ -1,6 +1,17 @@
 services:
+  engine-builder:
+    image: maven:3.9-eclipse-temurin-25-alpine
+    working_dir: /build/engine
+    volumes:
+      - ./engine:/build/engine:z
+      - ./client/assets/teavm:/build/client/assets/teavm
+      - ./server/handlers/teavm:/build/server/handlers/teavm
+      - maven-repo:/root/.m2
+    command: mvn clean package -DskipTests
+
   server:
-    build: .
+    image: node:20-alpine
+    working_dir: /app
     ports:
       - "3000:3000"
     volumes:
@@ -8,20 +19,33 @@ services:
       - /app/node_modules
     env_file:
       - .env
-    command: npm run dev
-    depends_on:
-      - db
     environment:
       - NODE_ENV=development
+    command: sh -c "npm install && npm run dev"
+    depends_on:
+      - db
+      - engine-builder
+
+  client:
+    image: node:20-alpine
+    working_dir: /app
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client:/app:z
+      - /app/node_modules
+    command: sh -c "npm install && npm run dev -- --host"
+    depends_on:
+      - engine-builder
+
   db:
     image: postgres
     restart: always
     env_file:
       - .env
-    ports:
-      - "5433:5432"
     volumes:
       - postgres-data:/var/lib/postgresql
       - ./database:/docker-entrypoint-initdb.d:z
 volumes:
   postgres-data:
+  maven-repo:
