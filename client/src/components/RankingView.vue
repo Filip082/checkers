@@ -112,9 +112,11 @@ h2 {
 
 .player-col {
   font-weight: 500;
+  color: #666;
 }
 
 .wins-col {
+  color: #666;
   text-align: right;
   font-weight: bold;
 }
