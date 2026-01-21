@@ -23,8 +23,12 @@ const board = ref({});
 const updateBoardState = (boardState) => {
   board.value = {};
 
-  boardState.biale.forEach(pos => board.value[pos] = 'white');
-  boardState.czarne.forEach(pos => board.value[pos] = 'red');
+  boardState.forEach(pawn => {
+    const status = pawn.captured ? 'captured' : '';
+    const dame = pawn.dame ? 'dame' : '';
+    const colorClass = pawn.color === 'Biały' ? 'white' : 'red';
+    board.value[pawn.position] = `${colorClass} ${status} ${dame}`.trim();
+  });
 };
 
 const connectSocket = () => {

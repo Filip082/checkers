@@ -130,16 +130,34 @@ const isDark = (index) => {
   cursor: pointer;
 }
 
+.piece.captured {
+  transform: none;
+  cursor: default;
+}
+
 /* White / Light Piece */
 .piece.white {
   background-color: #f0f0f0;
   border: 2px solid #ccc;
 }
 
+.piece.white.captured {
+  opacity: 0.5;
+}
+
 /* Burgundy / Red Piece */
 .piece.red {
   background-color: #800020; /* Burgundy */
   border: 2px solid #500014;
+}
+
+.piece.red.captured {
+  opacity: 0.4;
+}
+
+.piece.dame {
+  /* border: gold 2px solid; */
+  box-shadow: 0 0 10px 3px gold, 0 4px 6px rgba(0,0,0,0.4), inset -3px -3px 5px rgba(0,0,0,0.2), inset 3px 3px 5px rgba(255,255,255,0.3);
 }
 
 /* Labels */

@@ -12,9 +12,10 @@ const moveOk = ref(true);
 const moveInput = ref('');
 
 watch(() => props.move, () => {
-  verifyMove(warcaby.value, props.move);
+  const result = verifyMove(warcaby.value, props.move);
   applyMove(warcaby.value);
-  myTurn.value = !myTurn.value;
+  console.log('Move applied, result:', result);
+  myTurn.value = !(props.myColor === result);
   emit('board-state', getBoardState(warcaby.value));
 });
 
